@@ -12,19 +12,30 @@ function logMessage(message) {
 }
 //OpenAI integration to use it as a chatbot game
 async function getAdventureResponse(prompt) {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + OPENAI_API_KEY
-        },
-        body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
-            prompt: prompt,
-            max_tokens: 100
-        })
-    });
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + OPENAI_API_KEY
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [
+                    { role: 'system', content: 'You are a fantasy adventure game narrator.' },
+                    { role: 'user', content: prompt }
+                ],
+                max_tokens: 150,
+                temperature: 0.8
+            })
+        });
 
-    const data = await response.json();
-    logMessage("AI says: " + data.choices[0].message.content);
+        const data = await response.json();
+        const aiReply = data.choices[0].message.content;
+        logMessage("AI: " + aiReply);
+
+    } catch (error) {
+        console.error("OpenAI error:", error);
+        logMessage("No response from AI... something went wrong.");
+    }
 }
