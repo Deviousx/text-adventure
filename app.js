@@ -10,32 +10,32 @@ function logMessage(message) {
     entry.textContent = message;
     logBox.appendChild(entry);
 }
-//OpenAI integration to use it as a chatbot game
+//Hugging Face integration to use it as a chatbot game
 async function getAdventureResponse(prompt) {
     try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        const response = await fetch('https://api-inference.huggingface.co/models/google/flan-t5-large', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + OPENAI_API_KEY
+                'Authorization': `Bearer ${HF_API_KEY}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
-                messages: [
-                    { role: 'system', content: 'You are a fantasy adventure game narrator.' },
-                    { role: 'user', content: prompt }
-                ],
-                max_tokens: 150,
-                temperature: 0.8
+                inputs: `You are a fantasy adventure narrator. Continue the story: ${prompt}`
             })
         });
 
         const data = await response.json();
-        const aiReply = data.choices[0].message.content;
-        logMessage("AI: " + aiReply);
 
-    } catch (error) {
-        console.error("OpenAI error:", error);
-        logMessage("No response from AI... something went wrong.");
+        if (data.error) {
+            console.error("HF API error:", data.error);
+            logMessage("AI error: " + data.error.message);
+        } else {
+            const aiReply = data[0]?.generated_text || "The AI was quiet this time.";
+            logMessage("AI: " + aiReply);
+        }
+
+    } catch (err) {
+        console.error("Fetch error:", err);
+        logMessage("Something went wrong talking to the AI.");
     }
 }
