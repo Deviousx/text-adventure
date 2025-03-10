@@ -39,3 +39,34 @@ async function getAdventureResponse(prompt) {
         logMessage("Something went wrong talking to the AI.");
     }
 }
+function getRandomLoot() {
+    const lootTable = [
+        { item: "Rusty Sword", rarity: "Basic", chance: 50 },
+        { item: "Iron Dagger", rarity: "Basic", chance: 50 },
+        { item: "Enchanted Staff", rarity: "Rare", chance: 25 },
+        { item: "Dragonbone Shield", rarity: "Epic", chance: 10 },
+        { item: "Ring of Immortality", rarity: "Legendary", chance: 5 }
+    ];
+
+    const roll = Math.random() * 100;
+    let cumulative = 0;
+
+    for (let loot of lootTable) {
+        cumulative += loot.chance;
+        if (roll <= cumulative) {
+            return loot;
+        }
+    }
+
+    return null; // No loot if unlucky
+}
+
+function giveLoot() {
+    const loot = getRandomLoot();
+    if (loot) {
+        logMessage(`You found a ${loot.rarity} item: ${loot.item}`);
+    } else {
+        logMessage("No loot this time... D:");
+    }
+}
+
