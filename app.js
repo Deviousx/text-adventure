@@ -3,6 +3,13 @@
 let health = 100;
 let mana = 50;
 let lives = 3;
+// Enemy setup
+let enemy = {
+    name: "Shadow Warlock",
+    health: 100,
+    maxHealth: 100
+};
+
 
 function logMessage(message) {
     const logBox = document.getElementById('log');
@@ -67,6 +74,22 @@ function giveLoot() {
         logMessage(`You found a ${loot.rarity} item: ${loot.item}`);
     } else {
         logMessage("No loot this time... D:");
+    }
+}
+function attackEnemy() {
+    const damage = Math.floor(Math.random() * 20) + 5; // 5–24 damage
+    enemy.health -= damage;
+
+    if (enemy.health <= 0) {
+        enemy.health = 0;
+        logMessage(`⚔️ You dealt ${damage} damage and defeated the ${enemy.name}! Congrats`);
+        // Reset for now
+        setTimeout(() => {
+            enemy.health = enemy.maxHealth;
+            logMessage(`A new ${enemy.name} appears! Prepare to fight again.`);
+        }, 3000);
+    } else {
+        logMessage(`⚔️ You dealt ${damage} damage to the ${enemy.name}. (${enemy.health}/${enemy.maxHealth} HP left)`);
     }
 }
 
