@@ -82,14 +82,28 @@ function attackEnemy() {
 
     if (enemy.health <= 0) {
         enemy.health = 0;
-        logMessage(`⚔️ You dealt ${damage} damage and defeated the ${enemy.name}! Congrats`);
-        // Reset for now
+        logMessage(`You dealt ${damage} damage and defeated the ${enemy.name}! Congrats`);
+        updateEnemyUI();
+
+        // Reset the enemy after 3 seconds
         setTimeout(() => {
             enemy.health = enemy.maxHealth;
             logMessage(`A new ${enemy.name} appears! Prepare to fight again.`);
+            updateEnemyUI(); // Refresh the HP bar after reset
         }, 3000);
     } else {
-        logMessage(`⚔️ You dealt ${damage} damage to the ${enemy.name}. (${enemy.health}/${enemy.maxHealth} HP left)`);
+        logMessage(` You dealt ${damage} damage to the ${enemy.name}. (${enemy.health}/${enemy.maxHealth} HP left)`);
+        updateEnemyUI(); // Update HP bar on normal hit
     }
+}
+function updateEnemyUI() {
+    const healthBar = document.getElementById("enemy-health-bar");
+    const healthText = document.getElementById("enemy-health-text");
+    const nameText = document.getElementById("enemy-name");
+
+    const percent = (enemy.health / enemy.maxHealth) * 100;
+    healthBar.style.width = `${percent}%`;
+    healthText.textContent = `${enemy.health} / ${enemy.maxHealth} HP`;
+    nameText.textContent = ` ${enemy.name}`;
 }
 
