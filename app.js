@@ -3,6 +3,8 @@
 let health = 100;
 let mana = 50;
 let lives = 3;
+let level = 1;
+
 // Enemy setup
 let enemy = {
     name: "Shadow Warlock",
@@ -14,9 +16,12 @@ let enemy = {
 function logMessage(message) {
     const logBox = document.getElementById('log');
     const entry = document.createElement('p');
-    entry.textContent = message;
+    const time = new Date().toLocaleTimeString();
+    entry.innerHTML = `<span style="color:gray;">[${time}]</span> ${message}`;
     logBox.appendChild(entry);
+    logBox.scrollTop = logBox.scrollHeight;
 }
+
 //Hugging Face integration to use it as a chatbot game
 async function getAdventureResponse(prompt) {
     try {
@@ -83,6 +88,7 @@ function attackEnemy() {
     if (enemy.health <= 0) {
         enemy.health = 0;
         logMessage(`You dealt ${damage} damage and defeated the ${enemy.name}! Congrats`);
+        levelUp();
         updateEnemyUI();
 
         // Reset the enemy after 3 seconds
@@ -105,5 +111,11 @@ function updateEnemyUI() {
     healthBar.style.width = `${percent}%`;
     healthText.textContent = `${enemy.health} / ${enemy.maxHealth} HP`;
     nameText.textContent = ` ${enemy.name}`;
+}
+function levelUp() {
+    level++;
+    health = 100 + level * 10;
+    mana = 50 + level * 5;
+    logMessage(` You reached Level ${level}! Your power grows stronger.`);
 }
 
