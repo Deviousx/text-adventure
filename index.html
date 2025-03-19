@@ -4,22 +4,25 @@
     <title>Chatbot Text Adventure Game</title>
 </head>
 <body>
-    <h1>Text adventure game (AI based)</h1>
-    <div id="log" style="background: #eee; padding: 10px; margin-top: 20px;"></div>
+    <h1>Text Adventure Game (AI-Based)</h1>
+
+    <h2 id="chapter-title">Chapter 1</h2>
+
+    <div id="log" style="background: #eee; padding: 10px; margin-top: 20px; height: 300px; overflow-y: scroll;"></div>
+
+    <input type="text" id="player-input" placeholder="What do you do?" style="width: 300px;" />
+    <button onclick="submitChoice()">Submit</button>
+    <button onclick="playerAttack()">Attack</button>
+
+    <div id="enemy-stats" style="margin-top: 20px;">
+        <h3 id="enemy-name">No enemy yet</h3>
+        <div style="background-color: #ddd; width: 200px; height: 20px; border-radius: 5px; overflow: hidden;">
+            <div id="enemy-health-bar" style="height: 100%; background-color: crimson; width: 100%;"></div>
+        </div>
+        <p id="enemy-health-text">0 / 0 HP</p>
+    </div>
+
     <script src="config.js"></script>
     <script src="app.js"></script>
-    <div id="enemy-stats" style="margin-top: 20px;">
-        <h3 id="enemy-name">🧟‍♂️ Shadow Warlock</h3>
-        <div style="background-color: #ddd; width: 200px; height: 20px; border-radius: 5px; overflow: hidden;">
-          <div id="enemy-health-bar" style="height: 100%; background-color: crimson; width: 100%;"></div>
-        </div>
-        <p id="enemy-health-text">100 / 100 HP</p>
-      </div>    
-    <button onclick="getAdventureResponse('Start my journey')">Talk to AI</button>
-    <button onclick="giveLoot()">Open Chest</button>
-    <button onclick="attackEnemy()">Attack Enemy</button>
-
-
-
 </body>
 </html>
