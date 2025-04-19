@@ -16,26 +16,40 @@ function logMessage(message) {
 }
 
 // AI call
-async function getAdventureResponse(prompt) {
+async function getAdventureResponse(playerAction) {
     try {
-        const response = await fetch('https://api-inference.huggingface.co/models/google/flan-t5-large', {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${HF_API_KEY}`,
-                'Content-Type': 'application/json'
+                'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                'Content-Type': 'application/json',
+                'HTTP-Referer': 'https://yourdomain.com', // optional
+                'X-Title': 'AI Text Adventure Game'
             },
             body: JSON.stringify({
-                inputs: `Narrate a dark fantasy adventure story. The player is trying to escape a burning village and uncover the truth about their past. Respond in a dramatic and immersive way, continuing the story based on this action: "${prompt}"`
+                model: "openai/gpt-3.5-turbo",
+                messages: [
+                    {
+                        role: "system",
+                        content: "You are a dark fantasy narrator for a text adventure game. The player is escaping a burning village and uncovering the truth about their past. Narrate immersive, dramatic scenes based on player actions."
+                    },
+                    {
+                        role: "user",
+                        content: playerAction
+                    }
+                ],
+                temperature: 0.85,
+                max_tokens: 600
             })
         });
 
         const data = await response.json();
 
         if (data.error) {
-            console.error("HF API error:", data.error);
+            console.error("OpenRouter API error:", data.error);
             logMessage("AI error: " + data.error.message);
         } else {
-            const aiReply = data[0]?.generated_text || "The AI was quiet this time.";
+            const aiReply = data.choices?.[0]?.message?.content || "The AI said nothing.";
             logMessage("AI: " + aiReply);
         }
 
