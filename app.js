@@ -72,7 +72,6 @@ function submitChoice() {
 }
 
 // Chapter-based player input
-// Chapter-based player input
 function playerChoice(prompt) {
     if (inBattle) {
       logMessage("You can't explore right now — you're in battle!");
