@@ -32,7 +32,6 @@ async function getAdventureResponse(playerAction) {
       headers: {
         Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://yourdomain.com", // optional
         "X-Title": "AI Text Adventure Game"
       },
       body: JSON.stringify({
